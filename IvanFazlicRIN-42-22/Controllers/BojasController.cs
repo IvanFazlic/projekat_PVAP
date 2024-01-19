@@ -25,14 +25,18 @@ namespace IvanFazlicRIN_42_22.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Boja>>> GetBoje()
         {
-            return await _context.Boje.ToListAsync();
+            return await _context.Boje
+                .Include(x => x.Artikli)
+                .ToListAsync();
         }
 
         // GET: api/Bojas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Boja>> GetBoja(int id)
         {
-            var boja = await _context.Boje.FindAsync(id);
+            var boja = await _context.Boje
+                .Include(x => x.Artikli)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (boja == null)
             {
@@ -43,16 +47,18 @@ namespace IvanFazlicRIN_42_22.Controllers
         }
 
         // PUT: api/Bojas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBoja(int id, Boja boja)
+        public async Task<IActionResult> PutBoja(int id, BojaDto boja)
         {
-            if (id != boja.Id)
+            var pronadjenaBoja = await _context.Boje.FirstOrDefaultAsync(x => x.Id == id);
+            if (pronadjenaBoja == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(boja).State = EntityState.Modified;
+            pronadjenaBoja.Naziv = boja.Naziv;
+
+            _context.Entry(pronadjenaBoja).State = EntityState.Modified;
 
             try
             {
@@ -83,12 +89,12 @@ namespace IvanFazlicRIN_42_22.Controllers
             {
                 return NoContent();
             }
-            var brojUBazi = _context.Boje.FirstOrDefault(x => x.Naziv == boja.Naziv);
-            if (brojUBazi != null)
+            var pronadjiBoju = _context.Boje.FirstOrDefault(x => x.Naziv == boja.Naziv);
+            if (pronadjiBoju != null)
             {
                 return BadRequest();
             }
-            var bojaZaVracanje = new Boja
+            Boja bojaZaVracanje = new Boja
             {
                 Naziv = boja.Naziv,
             };

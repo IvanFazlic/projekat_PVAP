@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IvanFazlicRIN-42-22")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d625408e607596c802187f237540ba6e13135781")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+564e858ae24ff7ea4080218fdb835db9cee3af95")]
 [assembly: System.Reflection.AssemblyProductAttribute("IvanFazlicRIN-42-22")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IvanFazlicRIN-42-22")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
