@@ -45,14 +45,15 @@ namespace IvanFazlicRIN_42_22.Controllers
         // PUT: api/Kategorijas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutKategorija(int id, Kategorija kategorija)
+        public async Task<IActionResult> PutKategorija(int id, KategorijaDto kategorija)
         {
-            if (id != kategorija.Id)
+            var kategorijaZaPretragu = _context.Kategorije.FirstOrDefault(x => x.Id == id);
+            if (kategorijaZaPretragu == null)
             {
                 return BadRequest();
             }
-
-            _context.Entry(kategorija).State = EntityState.Modified;
+            kategorijaZaPretragu.Naziv = kategorija.Naziv;
+            _context.Entry(kategorijaZaPretragu).State = EntityState.Modified;
 
             try
             {
