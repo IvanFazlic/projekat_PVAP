@@ -14,7 +14,6 @@
     }
     public class ArtikalDto
     {
-        public int Id { get; set; }
         public string Naziv { get; set;}
         public decimal Cena { get; set; }
         public int BojaId { get; set;}

@@ -55,14 +55,24 @@ namespace IvanFazlicRIN_42_22.Controllers
         // PUT: api/Artikals/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutArtikal(int id, Artikal artikal)
+        public async Task<IActionResult> PutArtikal(int id, ArtikalDto artikal)
         {
-            if (id != artikal.Id)
+            var artikalZaVracanje = await _context.Artikli
+                                .Include(x => x.Boja)
+                                .Include(x => x.Komentari)
+                                .Include(x => x.ArtikalKategorije)
+                                .ThenInclude(x => x.Kategorija)
+                                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (artikalZaVracanje==null || id != artikalZaVracanje.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(artikal).State = EntityState.Modified;
+            artikalZaVracanje.Naziv = artikal.Naziv;
+            artikalZaVracanje.Cena = artikal.Cena;
+
+            _context.Entry(artikalZaVracanje).State = EntityState.Modified;
 
             try
             {
@@ -84,18 +94,12 @@ namespace IvanFazlicRIN_42_22.Controllers
         }
 
         // POST: api/Artikals
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Artikal>> PostArtikal(ArtikalDto artikal)
         {
             if (artikal == null)
             {
                 return NoContent();
-            }
-            var artikalId = await _context.Artikli.FirstOrDefaultAsync(x => x.Id == artikal.Id);
-            if (artikalId != null)
-            {
-                return BadRequest();
             }
             var artikalZaVracanje = new Artikal
             {
@@ -107,7 +111,7 @@ namespace IvanFazlicRIN_42_22.Controllers
             _context.Artikli.Add(artikalZaVracanje);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetArtikal", new { id = artikal.Id }, artikal);
+            return CreatedAtAction("GetArtikal", new { id = artikalZaVracanje.Id }, artikalZaVracanje);
         }
 
         // DELETE: api/Artikals/5

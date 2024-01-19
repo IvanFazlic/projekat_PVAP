@@ -260,3 +260,4 @@ C:\Users\fazli\OneDrive\Desktop\Test 2 PBAP API\IvanFazlicRIN-42-22\IvanFazlicRI
 C:\Users\fazli\OneDrive\Desktop\Test 2 PBAP API\IvanFazlicRIN-42-22\IvanFazlicRIN-42-22\bin\Debug\net8.0\Microsoft.AspNetCore.Metadata.dll
 C:\Users\fazli\OneDrive\Desktop\Test 2 PBAP API\IvanFazlicRIN-42-22\IvanFazlicRIN-42-22\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 C:\Users\fazli\OneDrive\Desktop\Test 2 PBAP API\IvanFazlicRIN-42-22\IvanFazlicRIN-42-22\bin\Debug\net8.0\Microsoft.JSInterop.dll
+C:\Users\fazli\OneDrive\Desktop\Test 2 PBAP API\IvanFazlicRIN-42-22\IvanFazlicRIN-42-22\obj\Debug\net8.0\IvanFazlicRIN-42-22.sourcelink.json
