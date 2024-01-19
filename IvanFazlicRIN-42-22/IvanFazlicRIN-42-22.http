@@ -1,0 +1,6 @@
+@IvanFazlicRIN_42_22_HostAddress = http://localhost:5032
+
+GET {{IvanFazlicRIN_42_22_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
