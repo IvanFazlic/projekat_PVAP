@@ -8,8 +8,12 @@
         public Artikal Artikal { get; set; }
     }
     public class KomentarDto
-    { 
+    {
         public int ArtikalId { get; set; }
+        public string Tekst { get; set; }
+    }
+    public class KomentarDtoPut
+    {
         public string Tekst { get; set; }
     }
 }

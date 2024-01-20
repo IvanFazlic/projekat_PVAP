@@ -45,14 +45,16 @@ namespace IvanFazlicRIN_42_22.Controllers
         // PUT: api/Komentars/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutKomentar(int id, Komentar komentar)
+        public async Task<IActionResult> PutKomentar(int id, KomentarDtoPut komentar)
         {
-            if (id != komentar.Id)
+            var nadjeniKomentar = _context.Komentari.FirstOrDefault(x => x.Id == id);
+            if (nadjeniKomentar == null)
             {
                 return BadRequest();
             }
+            nadjeniKomentar.Tekst = komentar.Tekst;
 
-            _context.Entry(komentar).State = EntityState.Modified;
+            _context.Entry(nadjeniKomentar).State = EntityState.Modified;
 
             try
             {
@@ -78,7 +80,8 @@ namespace IvanFazlicRIN_42_22.Controllers
         [HttpPost]
         public async Task<ActionResult<Komentar>> PostKomentar(KomentarDto komentar)
         {
-            if (komentar == null)
+            var pronadjiKomentar = _context.Artikli.FirstOrDefault(x => x.Id == komentar.ArtikalId);
+            if (pronadjiKomentar == null)
             {
                 return BadRequest();
             }

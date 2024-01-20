@@ -63,7 +63,11 @@ namespace IvanFazlicRIN_42_22.Controllers
                                 .Include(x => x.ArtikalKategorije)
                                 .ThenInclude(x => x.Kategorija)
                                 .FirstOrDefaultAsync(a => a.Id == id);
-
+            var proveraBoje = await _context.Boje.FindAsync(artikal.BojaId);
+            if (proveraBoje == null) 
+            {  
+                return NotFound("Bad bojaId"); 
+            }
             if (artikalZaVracanje==null || id != artikalZaVracanje.Id)
             {
                 return BadRequest();
@@ -71,6 +75,7 @@ namespace IvanFazlicRIN_42_22.Controllers
 
             artikalZaVracanje.Naziv = artikal.Naziv;
             artikalZaVracanje.Cena = artikal.Cena;
+            artikalZaVracanje.BojaId = artikal.BojaId;
 
             _context.Entry(artikalZaVracanje).State = EntityState.Modified;
 

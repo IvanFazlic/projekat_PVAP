@@ -79,6 +79,11 @@ namespace IvanFazlicRIN_42_22.Controllers
         [HttpPost]
         public async Task<ActionResult<Kategorija>> PostKategorija(KategorijaDto kategorija)
         {
+            var postojiKategorija = _context.Kategorije.FirstOrDefault(a => a.Naziv == kategorija.Naziv);
+            if (postojiKategorija != null)
+            {
+                return BadRequest("Kategorija vec postoji");
+            }
             if (kategorija == null)
             {
                 return NoContent();
