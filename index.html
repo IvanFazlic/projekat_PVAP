@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Artikals API Tester</h1>
+    <h4>Prikazi sve artikle</h4>
+    <button onclick="getAllArtikli();">Prikazi sve artikle</button>
+    <h4>Prikazi artikle po id-u</h4>
+    <input type="number" id="inputID">
+    <button onclick="getArtikliById()">Uhvati po ID-u</button>
+    <button onclick="deleteArtikal()">obrisi po ID-u</button>
+    <h4>Napravi artikal</h4>
+    <label for="ArtiakId">ArtiakId</label><br>
+    <input type="number" name="ArtiakId" id="ArtiakId"><br>
+    <label for="Naziv">Naziv</label><br>
+    <input type="text" name="Naziv" id="Naziv"><br>
+    <label for="Cena">Cena</label><br>
+    <input type="number" name="Cena" id="Cena"><br>
+    <label for="BojaId">BojaId</label><br>
+    <input type="number" name="BojaId" id="BojaId"><br><br>
+    <button onclick="createArtikal()">Napravi novi artikal</button>
+    <button onclick="updateArtikal()">Izmeni postojeci artikal</button>
+</body>
+<script src="app.js"></script>
+</html>

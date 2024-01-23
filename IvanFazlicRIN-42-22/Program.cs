@@ -17,12 +17,21 @@ namespace IvanFazlicRIN_42_22
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<ApplicationDbContext>();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowCors",
+                builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseCors("AllowCors");
             }
 
             app.UseHttpsRedirection();

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IvanFazlicRIN_42_22;
 using IvanFazlicRIN_42_22.Modals;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace IvanFazlicRIN_42_22.Controllers
 {
@@ -29,10 +30,11 @@ namespace IvanFazlicRIN_42_22.Controllers
         }
 
         // GET: api/ArtikalKategorijas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ArtikalKategorija>> GetArtikalKategorija(int id)
+        [HttpGet("{akrtialId}/{kategorijaId}")]
+        public async Task<ActionResult<ArtikalKategorija>> GetArtikalKategorija(int akrtialId, int kategorijaId)
         {
-            var artikalKategorija = await _context.ArtikalKategorije.FindAsync(id);
+            var artikalKategorija = await _context.ArtikalKategorije
+                .FirstOrDefaultAsync(x => x.ArtikalId == akrtialId && x.KategorijaId == kategorijaId);
 
             if (artikalKategorija == null)
             {
@@ -42,72 +44,53 @@ namespace IvanFazlicRIN_42_22.Controllers
             return artikalKategorija;
         }
 
-        // PUT: api/ArtikalKategorijas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutArtikalKategorija(int id, ArtikalKategorija artikalKategorija)
-        {
-            if (id != artikalKategorija.ArtikalId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(artikalKategorija).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ArtikalKategorijaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/ArtikalKategorijas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ArtikalKategorija>> PostArtikalKategorija(ArtikalKategorijaDto artikalKategorija)
         {
-            ArtikalKategorija artijalZaVracanja = new ArtikalKategorija {
+            var pronadjenArtikal = await _context.Artikli.FindAsync(artikalKategorija.ArtikalId);
+            var pronadjenaKategorija = await _context.Kategorije.FindAsync(artikalKategorija.KategorijaId);
+
+            if (pronadjenArtikal == null || pronadjenaKategorija == null)
+            {
+                return BadRequest("Artikal ili kategorija ne postoje.");
+            }
+
+            // Check if the ArtikalKategorija already exists
+            if (ArtikalKategorijaExists(artikalKategorija.ArtikalId, artikalKategorija.KategorijaId))
+            {
+                return Conflict("ArtikalKategorija već postoji.");
+            }
+
+            var artikalZaVracanje = new ArtikalKategorija
+            {
                 ArtikalId = artikalKategorija.ArtikalId,
                 KategorijaId = artikalKategorija.KategorijaId
             };
 
-            _context.ArtikalKategorije.Add(artijalZaVracanja);
+            _context.ArtikalKategorije.Add(artikalZaVracanje);
+
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (ArtikalKategorijaExists(artijalZaVracanja.ArtikalId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return StatusCode(500, "Greška pri čuvanju podataka.");
             }
 
-            return CreatedAtAction("GetArtikalKategorija", new { id = artikalKategorija.ArtikalId }, artikalKategorija);
+            return Ok();
         }
 
+
         // DELETE: api/ArtikalKategorijas/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteArtikalKategorija(int id)
+        [HttpDelete("{akrtialId}/{kategorijaId}")]
+        public async Task<IActionResult> DeleteArtikalKategorija(int akrtialId, int kategorijaId)
         {
-            var artikalKategorija = await _context.ArtikalKategorije.FindAsync(id);
+            var artikalKategorija = await _context.ArtikalKategorije
+                .FirstOrDefaultAsync(x => x.ArtikalId == akrtialId && x.KategorijaId == kategorijaId);
+
             if (artikalKategorija == null)
             {
                 return NotFound();
@@ -119,9 +102,9 @@ namespace IvanFazlicRIN_42_22.Controllers
             return NoContent();
         }
 
-        private bool ArtikalKategorijaExists(int id)
+        private bool ArtikalKategorijaExists(int artikalId,int kategorijaId)
         {
-            return _context.ArtikalKategorije.Any(e => e.ArtikalId == id);
+            return _context.ArtikalKategorije.Any(e => e.ArtikalId == artikalId && e.KategorijaId == kategorijaId);
         }
     }
 }

@@ -66,7 +66,7 @@ namespace IvanFazlicRIN_42_22.Controllers
             var proveraBoje = await _context.Boje.FindAsync(artikal.BojaId);
             if (proveraBoje == null) 
             {  
-                return NotFound("Bad bojaId"); 
+                return BadRequest("Bad bojaId"); 
             }
             if (artikalZaVracanje==null || id != artikalZaVracanje.Id)
             {
@@ -102,6 +102,11 @@ namespace IvanFazlicRIN_42_22.Controllers
         [HttpPost]
         public async Task<ActionResult<Artikal>> PostArtikal(ArtikalDto artikal)
         {
+            var postojiBoja =await _context.Boje.FirstOrDefaultAsync(x => x.Id == artikal.BojaId);
+            if(postojiBoja == null)
+            {
+                return BadRequest("Boja ne postoji u bazi.");
+            }
             if (artikal == null)
             {
                 return NoContent();
